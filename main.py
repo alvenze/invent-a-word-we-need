@@ -30,6 +30,12 @@ def main(argv) -> int:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(ENTRY)
+    # Round-trip: read back and verify the written bytes are exactly ENTRY.
+    with open(path, "rb") as f:
+        written = f.read()
+    if written != ENTRY.encode("utf-8"):
+        print("FAIL: written entry differs from ENTRY", file=sys.stderr)
+        return 1
     return 0
 
 
